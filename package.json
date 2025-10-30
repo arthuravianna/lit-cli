@@ -1,12 +1,12 @@
 {
   "name": "@arthuravianna/lit-cli",
   "description": "A Lit CLI tool to create Vincent Abilities and Policies",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Arthur Vianna",
   "bin": {
     "lit": "./bin/run.js"
   },
-  "bugs": "https://github.com/lit/lit-cli/issues",
+  "bugs": "https://github.com/arthuravianna/lit-cli/issues",
   "dependencies": {
     "@lit-protocol/esbuild-plugin-polyfill-node": "^0.3.0",
     "@oclif/core": "^4",
@@ -44,7 +44,7 @@
     "./dist",
     "./oclif.manifest.json"
   ],
-  "homepage": "https://github.com/lit/lit-cli",
+  "homepage": "https://github.com/arthuravianna/lit-cli",
   "keywords": [
     "oclif"
   ],
@@ -66,7 +66,7 @@
       }
     }
   },
-  "repository": "lit/lit-cli",
+  "repository": "https://github.com/arthuravianna/lit-cli",
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint",
