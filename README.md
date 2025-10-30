@@ -1,8 +1,7 @@
 lit-cli
 =================
 
-A new CLI generated with oclif
-
+A command-line interface for building, deploying, and managing Lit Protocol projects. This CLI helps developers create Vincent Abilities and Vincent Policies, build them for deployment, and deploy them to IPFS.
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/lit-cli.svg)](https://npmjs.org/package/lit-cli)
@@ -11,6 +10,8 @@ A new CLI generated with oclif
 
 <!-- toc -->
 * [Usage](#usage)
+* [What is lit-cli?](#what-is-lit-cli)
+* [Typical Workflow](#typical-workflow)
 * [Commands](#commands)
 <!-- tocstop -->
 # Usage
@@ -27,63 +28,106 @@ USAGE
 ...
 ```
 <!-- usagestop -->
+
+# What is lit-cli?
+
+The Lit CLI is a developer tool for building and deploying projects on the Lit Protocol network. It provides functionality to:
+
+- **Create Vincent Abilities**: Initialize new Vincent Ability projects from templates
+- **Build Projects**: Bundle and compile Lit Protocol projects for deployment
+- **Deploy to IPFS**: Upload compiled Lit Actions to IPFS via Pinata with automatic CID generation and verification
+
+# Typical Workflow
+
+1. **Create a new project**:
+   ```bash
+   lit create vincent-ability my-awesome-ability
+   ```
+
+2. **Build your project**:
+   ```bash
+   cd my-awesome-ability
+   lit build
+   ```
+
+3. **Deploy to IPFS**:
+   ```bash
+   lit deploy --pinata-jwt your-jwt-token
+   ```
+
+The CLI handles template downloading, project scaffolding, esbuild compilation, IPFS CID generation, and deployment to Pinata automatically.
+
 # Commands
 <!-- commands -->
-* [`lit hello PERSON`](#lit-hello-person)
-* [`lit hello world`](#lit-hello-world)
+* [`lit build`](#lit-build)
+* [`lit create vincent-ability PROJECT`](#lit-create-vincent-ability-project)
+* [`lit deploy`](#lit-deploy)
 * [`lit help [COMMAND]`](#lit-help-command)
-* [`lit plugins`](#lit-plugins)
-* [`lit plugins add PLUGIN`](#lit-plugins-add-plugin)
-* [`lit plugins:inspect PLUGIN...`](#lit-pluginsinspect-plugin)
-* [`lit plugins install PLUGIN`](#lit-plugins-install-plugin)
-* [`lit plugins link PATH`](#lit-plugins-link-path)
-* [`lit plugins remove [PLUGIN]`](#lit-plugins-remove-plugin)
-* [`lit plugins reset`](#lit-plugins-reset)
-* [`lit plugins uninstall [PLUGIN]`](#lit-plugins-uninstall-plugin)
-* [`lit plugins unlink [PLUGIN]`](#lit-plugins-unlink-plugin)
-* [`lit plugins update`](#lit-plugins-update)
 
-## `lit hello PERSON`
+## `lit build`
 
-Say hello
+Build and test the Lit project
 
 ```
 USAGE
-  $ lit hello PERSON -f <value>
+  $ lit build
+
+DESCRIPTION
+  Build and test the lit project
+
+EXAMPLES
+  $ lit build
+```
+
+_See code: [src/commands/build.ts](https://github.com/arthuravianna/lit-cli/blob/main/src/commands/build.ts)_
+
+## `lit create vincent-ability PROJECT`
+
+Initialize a project template to create a Vincent ability
+
+```
+USAGE
+  $ lit create vincent-ability PROJECT [--npm_package <value>] [--description <value>]
 
 ARGUMENTS
-  PERSON  Person to say hello to
+  PROJECT  project name
 
 FLAGS
-  -f, --from=<value>  (required) Who is saying hello
+  -d, --description=<value>   Vincent Ability Description
+  -n, --npm_package=<value>   Vincent Ability npm package name
 
 DESCRIPTION
-  Say hello
+  Initialize a project template to create a Vincent ability
 
 EXAMPLES
-  $ lit hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
+  $ lit create vincent-ability my-ability
+  $ lit create vincent-ability my-ability --npm_package @myorg/my-ability --description "My custom Vincent ability"
 ```
 
-_See code: [src/commands/hello/index.ts](https://github.com/lit/lit-cli/blob/v0.0.0/src/commands/hello/index.ts)_
+_See code: [src/commands/create/vincent-policy.ts](https://github.com/arthuravianna/lit-cli/blob/main/src/commands/create/vincent-policy.ts)_
 
-## `lit hello world`
+## `lit deploy`
 
-Say hello world
+Deploy the bundled Lit Action to IPFS (via Pinata) and NPM
 
 ```
 USAGE
-  $ lit hello world
+  $ lit deploy [-f <value>] [-j <value>]
+
+FLAGS
+  -f, --env-file=<value>     [default: .env] use .env file
+  -j, --pinata-jwt=<value>   Pinata JWT token (overrides .env file)
 
 DESCRIPTION
-  Say hello world
+  Deploy the bundled Lit Action to IPFS (via Pinata) and NPM
 
 EXAMPLES
-  $ lit hello world
-  hello world! (./src/commands/hello/world.ts)
+  $ lit deploy
+  $ lit deploy --pinata-jwt your-jwt-token
+  $ lit deploy --env-file .env.production
 ```
 
-_See code: [src/commands/hello/world.ts](https://github.com/lit/lit-cli/blob/v0.0.0/src/commands/hello/world.ts)_
+_See code: [src/commands/deploy.ts](https://github.com/arthuravianna/lit-cli/blob/main/src/commands/deploy.ts)_
 
 ## `lit help [COMMAND]`
 
@@ -105,293 +149,5 @@ DESCRIPTION
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.34/src/commands/help.ts)_
 
-## `lit plugins`
 
-List installed plugins.
-
-```
-USAGE
-  $ lit plugins [--json] [--core]
-
-FLAGS
-  --core  Show core plugins.
-
-GLOBAL FLAGS
-  --json  Format output as json.
-
-DESCRIPTION
-  List installed plugins.
-
-EXAMPLES
-  $ lit plugins
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.51/src/commands/plugins/index.ts)_
-
-## `lit plugins add PLUGIN`
-
-Installs a plugin into lit.
-
-```
-USAGE
-  $ lit plugins add PLUGIN... [--json] [-f] [-h] [-s | -v]
-
-ARGUMENTS
-  PLUGIN...  Plugin to install.
-
-FLAGS
-  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
-  -h, --help     Show CLI help.
-  -s, --silent   Silences npm output.
-  -v, --verbose  Show verbose npm output.
-
-GLOBAL FLAGS
-  --json  Format output as json.
-
-DESCRIPTION
-  Installs a plugin into lit.
-
-  Uses npm to install plugins.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  Use the LIT_NPM_LOG_LEVEL environment variable to set the npm loglevel.
-  Use the LIT_NPM_REGISTRY environment variable to set the npm registry.
-
-ALIASES
-  $ lit plugins add
-
-EXAMPLES
-  Install a plugin from npm registry.
-
-    $ lit plugins add myplugin
-
-  Install a plugin from a github url.
-
-    $ lit plugins add https://github.com/someuser/someplugin
-
-  Install a plugin from a github slug.
-
-    $ lit plugins add someuser/someplugin
-```
-
-## `lit plugins:inspect PLUGIN...`
-
-Displays installation properties of a plugin.
-
-```
-USAGE
-  $ lit plugins inspect PLUGIN...
-
-ARGUMENTS
-  PLUGIN...  [default: .] Plugin to inspect.
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-GLOBAL FLAGS
-  --json  Format output as json.
-
-DESCRIPTION
-  Displays installation properties of a plugin.
-
-EXAMPLES
-  $ lit plugins inspect myplugin
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.51/src/commands/plugins/inspect.ts)_
-
-## `lit plugins install PLUGIN`
-
-Installs a plugin into lit.
-
-```
-USAGE
-  $ lit plugins install PLUGIN... [--json] [-f] [-h] [-s | -v]
-
-ARGUMENTS
-  PLUGIN...  Plugin to install.
-
-FLAGS
-  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
-  -h, --help     Show CLI help.
-  -s, --silent   Silences npm output.
-  -v, --verbose  Show verbose npm output.
-
-GLOBAL FLAGS
-  --json  Format output as json.
-
-DESCRIPTION
-  Installs a plugin into lit.
-
-  Uses npm to install plugins.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  Use the LIT_NPM_LOG_LEVEL environment variable to set the npm loglevel.
-  Use the LIT_NPM_REGISTRY environment variable to set the npm registry.
-
-ALIASES
-  $ lit plugins add
-
-EXAMPLES
-  Install a plugin from npm registry.
-
-    $ lit plugins install myplugin
-
-  Install a plugin from a github url.
-
-    $ lit plugins install https://github.com/someuser/someplugin
-
-  Install a plugin from a github slug.
-
-    $ lit plugins install someuser/someplugin
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.51/src/commands/plugins/install.ts)_
-
-## `lit plugins link PATH`
-
-Links a plugin into the CLI for development.
-
-```
-USAGE
-  $ lit plugins link PATH [-h] [--install] [-v]
-
-ARGUMENTS
-  PATH  [default: .] path to plugin
-
-FLAGS
-  -h, --help          Show CLI help.
-  -v, --verbose
-      --[no-]install  Install dependencies after linking the plugin.
-
-DESCRIPTION
-  Links a plugin into the CLI for development.
-
-  Installation of a linked plugin will override a user-installed or core plugin.
-
-  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
-  command will override the user-installed or core plugin implementation. This is useful for development work.
-
-
-EXAMPLES
-  $ lit plugins link myplugin
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.51/src/commands/plugins/link.ts)_
-
-## `lit plugins remove [PLUGIN]`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ lit plugins remove [PLUGIN...] [-h] [-v]
-
-ARGUMENTS
-  [PLUGIN...]  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ lit plugins unlink
-  $ lit plugins remove
-
-EXAMPLES
-  $ lit plugins remove myplugin
-```
-
-## `lit plugins reset`
-
-Remove all user-installed and linked plugins.
-
-```
-USAGE
-  $ lit plugins reset [--hard] [--reinstall]
-
-FLAGS
-  --hard       Delete node_modules and package manager related files in addition to uninstalling plugins.
-  --reinstall  Reinstall all plugins after uninstalling.
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.51/src/commands/plugins/reset.ts)_
-
-## `lit plugins uninstall [PLUGIN]`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ lit plugins uninstall [PLUGIN...] [-h] [-v]
-
-ARGUMENTS
-  [PLUGIN...]  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ lit plugins unlink
-  $ lit plugins remove
-
-EXAMPLES
-  $ lit plugins uninstall myplugin
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.51/src/commands/plugins/uninstall.ts)_
-
-## `lit plugins unlink [PLUGIN]`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ lit plugins unlink [PLUGIN...] [-h] [-v]
-
-ARGUMENTS
-  [PLUGIN...]  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ lit plugins unlink
-  $ lit plugins remove
-
-EXAMPLES
-  $ lit plugins unlink myplugin
-```
-
-## `lit plugins update`
-
-Update installed plugins.
-
-```
-USAGE
-  $ lit plugins update [-h] [-v]
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Update installed plugins.
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.51/src/commands/plugins/update.ts)_
 <!-- commandsstop -->
